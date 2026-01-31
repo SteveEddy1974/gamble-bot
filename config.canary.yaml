@@ -8,7 +8,7 @@ bot:
   simulate_place_bets: false
   live_enabled: true         # operator must enable via token
   operator_token_env: "BOT_OPERATOR_TOKEN"
-  operator_token_hash: "<SHA256_HEX_OF_TOKEN>"  # replace with generated hash
+  operator_token_hash: "8912fc51f1e86a15b38b95deaba254820d9367685bfdc65f5a8986106eaec34d"  # replace with generated hash
   canary_max_stake: 1.0
   canary_max_exposure_pct: 0.01
   metrics_enabled: true
