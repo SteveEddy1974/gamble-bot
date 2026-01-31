@@ -75,3 +75,55 @@ jobs:
         run: |
           bandit -r . -lll
 
+  smoke_canary:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Start short simulated canary (background)
+        run: |
+          set -e
+          python -u -m main --iterations 30 --poll-interval 0.5 > canary.log 2>&1 &
+          echo $! > canary.pid
+          # Wait for HTTP metrics exporter
+          python - <<'PY'
+import time,requests,sys
+for i in range(30):
+    try:
+        r=requests.get('http://127.0.0.1:8000/metrics', timeout=1)
+        if r.status_code==200:
+            print('HTTP /metrics OK')
+            break
+    except Exception:
+        time.sleep(0.5)
+else:
+    print('HTTP /metrics not responding', file=sys.stderr); sys.exit(1)
+# Check Prometheus WSGI endpoint (best-effort)
+for i in range(30):
+    try:
+        r=requests.get('http://127.0.0.1:9151/metrics', timeout=1)
+        if r.status_code==200:
+            print('Prometheus /metrics OK')
+            break
+    except Exception:
+        time.sleep(0.5)
+else:
+    print('Prometheus /metrics did not respond (skipping)', file=sys.stderr)
+PY
+      - name: Stop canary
+        run: |
+          if [ -f canary.pid ]; then kill $(cat canary.pid) || true; fi
+      - name: Upload canary logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-log
+          path: canary.log
+
