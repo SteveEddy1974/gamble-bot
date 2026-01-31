@@ -21,3 +21,20 @@ Quickstart
 
 Security note: the Prometheus server binds to `127.0.0.1` by default for safety; if you expose it externally, protect it with network ACLs or an internal gateway.
 
+### Canary quick-start 🚀
+
+- Run a short simulated canary (safe, does not place live bets):
+
+  `python -m main --iterations 10 --poll-interval 0.5`
+
+- Verify metrics endpoints:
+  - HTTP exporter: `http://127.0.0.1:8000/metrics`
+  - Prometheus WSGI:  `http://127.0.0.1:9151/metrics`
+
+- To enable a gated live canary (operator-gated and with safe defaults):
+  1. Generate a token and hash: `python scripts/generate_operator_token_hash.py <secret>` and set `BOT_OPERATOR_TOKEN` in your environment.
+  2. In `config.yaml` set `bot.live_enabled: true` and `bot.operator_token_hash` to the generated hash.
+  3. Verify `bot.use_exchange_api` is configured correctly (it is disabled by default for safety).
+
+- The CI contains smoke checks that validate metrics endpoints and the Prometheus WSGI exporter to ensure observability during canary runs.
+
