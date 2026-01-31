@@ -18,9 +18,9 @@ bot:
   # Enabled by default for staging/canary; set to false to disable
   metrics_enabled: true
   metrics_port: 8000
-  metrics_prometheus: false
-  # If null, an ephemeral port will be used for local testing
-  metrics_prometheus_port: null
+  metrics_prometheus: true
+  # Fixed port for local Prometheus verification
+  metrics_prometheus_port: 9151
 
   # Exchange API integration
   use_exchange_api: false
@@ -49,5 +49,5 @@ bot:
   alert_level: WARNING
 
 logging:
-  level: INFO
+  level: DEBUG
   file: "bot.log"

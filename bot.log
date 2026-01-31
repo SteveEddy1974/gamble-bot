@@ -138,3 +138,6 @@
 2026-01-31 14:26:46,140 ERROR Error reconciling cleared orders: 503 Service Unavailable
 2026-01-31 14:26:46,213 INFO Settlement received: betId=None selection=1 status=WON payout=10.0
 2026-01-31 14:26:46,213 WARNING Settlement without betId; cannot process precisely
+2026-01-31 15:53:25,458 INFO Started Prometheus metrics server on port 53516
+2026-01-31 15:54:02,103 INFO Started Prometheus metrics server on port 58094
+2026-01-31 16:05:01,911 INFO Started Prometheus metrics server on port 9151
