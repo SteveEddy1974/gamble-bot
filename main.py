@@ -299,20 +299,24 @@ def main(iterations: Optional[int] = None, override_poll_interval: Optional[floa
     # Start metrics server when enabled in config
     try:
         if config.get('bot', {}).get('metrics_enabled', False):
-            # If prometheus integration is enabled, use it (binds to localhost)
-            if config.get('bot', {}).get('metrics_prometheus', False):
-                from metrics import start_prometheus_server
-                port = config.get('bot', {}).get('metrics_prometheus_port', None)
-                try:
-                    used_port = start_prometheus_server(port)
-                    logging.info('Started Prometheus metrics server on port %s', used_port)
-                except Exception:
-                    logging.exception('Unable to start Prometheus metrics server')
-            else:
-                from metrics import MetricsServer
+            # Start the lightweight HTTP exporter (useful in all deployments)
+            try:
+                from metrics import MetricsServer, start_prometheus_server
                 port = config.get('bot', {}).get('metrics_port', 8000)
                 metrics_server = MetricsServer(port=port)
                 metrics_server.start()
+                logging.info('Started Metrics HTTP exporter on port %s', port)
+            except Exception:
+                logging.exception('Unable to start Metrics HTTP exporter')
+
+            # If prometheus integration is enabled, start a WSGI-exporter too (binds to localhost)
+            if config.get('bot', {}).get('metrics_prometheus', False):
+                try:
+                    prom_port = config.get('bot', {}).get('metrics_prometheus_port', None)
+                    used_port = start_prometheus_server(prom_port)
+                    logging.info('Started Prometheus metrics server on port %s', used_port)
+                except Exception:
+                    logging.exception('Unable to start Prometheus metrics server')
     except Exception:
         pass
 
