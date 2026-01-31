@@ -1,0 +1,29 @@
+name: Canary Nightly
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # daily at 03:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  nightly_canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.14'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run nightly simulated canary
+        run: |
+          set -e
+          python -u -m main --iterations 120 --poll-interval 0.5 > nightly-canary.log 2>&1 || true
+      - name: Upload canary logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-canary-log
+          path: nightly-canary.log
