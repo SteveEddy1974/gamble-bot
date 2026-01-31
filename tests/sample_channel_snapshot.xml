@@ -1,0 +1,30 @@
+<channelSnapshot>
+  <shoe>
+    <cardsDealt>10</cardsDealt>
+    <cardsRemaining>406</cardsRemaining>
+    <cardCounts>
+      <card rank="1">32</card>
+      <card rank="2">32</card>
+      <card rank="3">32</card>
+      <card rank="4">32</card>
+      <card rank="5">32</card>
+      <card rank="6">32</card>
+      <card rank="7">32</card>
+      <card rank="8">32</card>
+      <card rank="9">32</card>
+      <card rank="10">32</card>
+      <card rank="11">32</card>
+      <card rank="12">32</card>
+      <card rank="13">32</card>
+    </cardCounts>
+  </shoe>
+  <marketSelections>
+    <selection>
+      <selectionId>1</selectionId>
+      <name>Pocket Pair In Any Hand</name>
+      <status>IN_PLAY</status>
+      <bestBackPrice>5.0</bestBackPrice>
+      <bestLayPrice>5.5</bestLayPrice>
+    </selection>
+  </marketSelections>
+</channelSnapshot>

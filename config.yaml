@@ -1,0 +1,53 @@
+# Baccarat SideBets Bot configuration
+credentials:
+  username: "steve@aquacreations.ltd"
+  password: "Egr1t_1605@LetssG000"
+
+bot:
+  min_edge: 0.05
+  max_exposure_pct: 0.10
+  start_balance: 1000
+  poll_interval_seconds: 3
+  currency: "GBP"
+  simulate: true
+  simulate_place_bets: true
+  simulate_start_cards: 416
+  simulate_decrement: 8
+  simulate_reset_after: 50
+  # Metrics: optional HTTP/Prometheus exporter for canary monitoring
+  # Enabled by default for staging/canary; set to false to disable
+  metrics_enabled: true
+  metrics_port: 8000
+  metrics_prometheus: false
+  # If null, an ephemeral port will be used for local testing
+  metrics_prometheus_port: null
+
+  # Exchange API integration
+  use_exchange_api: false
+  exchange_app_key: ""
+  exchange_session_token: ""
+  exchange_poll_cleared_seconds: 60
+  exchange_cleared_lookback_seconds: 3600
+  # How many processed betIds to retain in state (0 = unlimited)
+  state_max_processed_ids: 10000
+  # Optional CSV path to append cleared orders for audit/backtesting
+  cleared_orders_csv: "cleared_orders.csv"
+
+  # Operator gating for live canary deployments
+  # Set `live_enabled: true` and configure `operator_token_hash` to the SHA256 of a secret token.
+  # Operators enable live by setting the token value in the env var named in `operator_token_env` (default BOT_OPERATOR_TOKEN).
+  live_enabled: false
+  operator_token_env: "BOT_OPERATOR_TOKEN"
+  operator_token_hash: null
+  # Canary-specific limits (applied when live is enabled)
+  canary_max_stake: 1.0
+  canary_max_exposure_pct: 0.01
+
+  # Alerts (simple webhook)
+  alerts_enabled: false
+  alert_webhook_url: null
+  alert_level: WARNING
+
+logging:
+  level: INFO
+  file: "bot.log"

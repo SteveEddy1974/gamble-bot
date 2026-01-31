@@ -1,0 +1,7 @@
+requests
+pyyaml
+lxml
+coverage
+flake8
+bandit
+prometheus_client

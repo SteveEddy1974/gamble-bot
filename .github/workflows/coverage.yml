@@ -1,0 +1,75 @@
+name: Coverage
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  test-and-coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10, 3.11]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run tests with coverage
+        run: |
+          coverage run -m unittest discover
+          coverage report --fail-under=90
+      - name: Validate /metrics endpoint
+        env:
+          PYTHONUNBUFFERED: 1
+        run: |
+          python - <<'PY'
+          import time
+          import requests
+          import metrics
+          # ensure there is a metric so we can observe it
+          metrics.inc_bet_placed()
+          s = metrics.MetricsServer(port=0)
+          s.start()
+          try:
+              # small wait for server to start
+              time.sleep(0.2)
+              host = '127.0.0.1'
+              port = s._server.server_address[1]
+              r = requests.get(f'http://{host}:{port}/metrics', timeout=5)
+              assert r.status_code == 200, 'metrics endpoint bad status'
+              assert 'bets_placed' in r.text, 'metric missing'
+              print('metrics endpoint OK')
+          finally:
+              s.stop()
+          PY
+
+      - name: Validate Prometheus endpoint
+        env:
+          PYTHONUNBUFFERED: 1
+        run: |
+          python - <<'PY'
+          import time
+          import requests
+          import metrics
+          # If prometheus integration is unavailable, skip gracefully
+          if not hasattr(metrics, 'start_prometheus_server'):
+              print('prometheus support unavailable; skipping')
+          else:
+              port = metrics.start_prometheus_server(port=None)
+              try:
+                  # small wait for server to start
+                  time.sleep(0.2)
+                  r = requests.get(f'http://127.0.0.1:{port}/', timeout=5)
+                  assert r.status_code == 200, 'prometheus endpoint bad status'
+                  assert 'bets_placed' in r.text or 'exchange_rpc_retries' in r.text, 'metric missing'
+                  print('prometheus endpoint OK')
+              finally:
+                  metrics.stop_prometheus_server()
+          PY
