@@ -19,8 +19,8 @@ bot:
   metrics_enabled: true
   metrics_port: 8000
   metrics_prometheus: true
-  # If null, an ephemeral port will be used for local testing
-  metrics_prometheus_port: null
+  # Fixed port for local Prometheus verification
+  metrics_prometheus_port: 9151
 
   # Exchange API integration
   use_exchange_api: false
