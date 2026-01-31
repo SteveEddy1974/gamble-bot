@@ -1,0 +1,24 @@
+# Example canary configuration (never checked in with real secrets)
+credentials:
+  username: ""
+  password: ""
+
+bot:
+  simulate: false            # run in live mode (operator-gated)
+  simulate_place_bets: false
+  live_enabled: true         # operator must enable via token
+  operator_token_env: "BOT_OPERATOR_TOKEN"
+  operator_token_hash: "<SHA256_HEX_OF_TOKEN>"  # replace with generated hash
+  canary_max_stake: 1.0
+  canary_max_exposure_pct: 0.01
+  metrics_enabled: true
+  metrics_prometheus: true
+  metrics_port: 8000
+  metrics_prometheus_port: 9151
+
+# Optional: enable Exchange API (ensure credentials configured) - default is false for safety
+use_exchange_api: false
+
+# Alerts
+alerts_enabled: false
+alert_webhook_url: null
