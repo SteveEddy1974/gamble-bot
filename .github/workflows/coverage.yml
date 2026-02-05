@@ -24,7 +24,8 @@ jobs:
       - name: Run tests with coverage
         run: |
           pip install pytest pytest-cov
-          coverage run -m pytest
+          # Exclude scripts and tests from coverage so we measure the main package code
+          coverage run --omit='scripts/*,tests/*' -m pytest
           coverage report --fail-under=90
       - name: Validate /metrics endpoint
         env:
