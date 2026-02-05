@@ -1,0 +1,195 @@
+<channelSnapshot xmlns="urn:betfair:games:api:v1">
+    <channel id="1444086" name="Exchange Baccarat" gameType="BACCARAT">
+        <status>RUNNING</status>
+        <game id="102191233">
+            <round>1</round>
+            <bettingWindowTime>20</bettingWindowTime>
+            <bettingWindowPercentageComplete>98</bettingWindowPercentageComplete>
+            <gameData>
+                <object name="Player">
+                    <description/>
+                    <status>IN_PLAY</status>
+                    <property name="Card 1" value="NOT AVAILABLE"/>
+                    <property name="Card 2" value="NOT AVAILABLE"/>
+                </object>
+                <object name="Banker">
+                    <description/>
+                    <status>IN_PLAY</status>
+                    <property name="Card 1" value="NOT AVAILABLE"/>
+                    <property name="Card 2" value="NOT AVAILABLE"/>
+                </object>
+                <object name="Shoe">
+                    <description>Baccarat Shoe Information</description>
+                    <status>N/A</status>
+                    <property name="cardsDealt" value="5"/>
+                    <property name="cardsRemaining" value="411"/>
+                    <property name="Card 1" value="32"/>
+                    <property name="Card 2" value="30"/>
+                    <property name="Card 3" value="32"/>
+                    <property name="Card 4" value="32"/>
+                    <property name="Card 5" value="31"/>
+                    <property name="Card 6" value="32"/>
+                    <property name="Card 7" value="32"/>
+                    <property name="Card 8" value="32"/>
+                    <property name="Card 9" value="31"/>
+                    <property name="Card 10" value="32"/>
+                    <property name="Card 11" value="31"/>
+                    <property name="Card 12" value="32"/>
+                    <property name="Card 13" value="32"/>
+                </object>
+                <object name="Scorecard">
+                    <description>Baccarat Scorecard Information</description>
+                    <status>N/A</status>
+                    <property name="Content" value="B5"/>
+                </object>
+            </gameData>
+            <markets currency="GBP">
+                <market id="8300319" nextId="8300347">
+                    <status>ACTIVE</status>
+                    <commissionRate>2.0</commissionRate>
+                    <marketType>SINGLE_WINNER_OR_TIE</marketType>
+                    <selections type="MainBets">
+                        <selection id="1032010">
+                            <name>Player</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300319&amp;selectionId=1032010" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <profitLoss>0.0</profitLoss>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="13228.0">2.0</price>
+                                <price amountUnmatched="2327.0">1.98</price>
+                                <price amountUnmatched="3640.0">1.94</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="444.0">2.04</price>
+                                <price amountUnmatched="12428.0">2.06</price>
+                                <price amountUnmatched="2219.0">2.08</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                        <selection id="1032009">
+                            <name>Banker</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300319&amp;selectionId=1032009" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <profitLoss>0.0</profitLoss>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="462.0">1.96</price>
+                                <price amountUnmatched="1402.0">1.95</price>
+                                <price amountUnmatched="11804.0">1.94</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="1824.0">1.99</price>
+                                <price amountUnmatched="11404.0">2.0</price>
+                                <price amountUnmatched="2281.0">2.02</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                        <selection id="1032011">
+                            <name>Tie</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300319&amp;selectionId=1032011" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <profitLoss>0.0</profitLoss>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="87.0">10.4</price>
+                                <price amountUnmatched="2922.0">10.2</price>
+                                <price amountUnmatched="686.0">9.9</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="86.0">10.6</price>
+                                <price amountUnmatched="2399.0">10.8</price>
+                                <price amountUnmatched="428.0">11.0</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                    </selections>
+                </market>
+                <market id="8300320" nextId="8300348">
+                    <status>ACTIVE</status>
+                    <commissionRate>2.5</commissionRate>
+                    <marketType>ANY_NUMBER_OF_WINNERS</marketType>
+                    <selections type="SideBets">
+                        <selection id="1032012">
+                            <name>Pocket Pair In Any Hand</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300320&amp;selectionId=1032012" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="35.0">6.9</price>
+                                <price amountUnmatched="1414.0">6.8</price>
+                                <price amountUnmatched="300.0">6.7</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="35.0">7.0</price>
+                                <price amountUnmatched="1378.0">7.1</price>
+                                <price amountUnmatched="288.0">7.2</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                        <selection id="1032013">
+                            <name>Highest Hand Has Nine</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300320&amp;selectionId=1032013" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="173.0">3.95</price>
+                                <price amountUnmatched="2881.0">3.9</price>
+                                <price amountUnmatched="804.0">3.8</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="170.0">4.05</price>
+                                <price amountUnmatched="2283.0">4.1</price>
+                                <price amountUnmatched="500.0">4.15</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                        <selection id="1032014">
+                            <name>Highest Hand Is Odd</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300320&amp;selectionId=1032014" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="133.0">1.81</price>
+                                <price amountUnmatched="251.0">1.79</price>
+                                <price amountUnmatched="5273.0">1.78</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="132.0">1.83</price>
+                                <price amountUnmatched="242.0">1.84</price>
+                                <price amountUnmatched="5027.0">1.85</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                        <selection id="1032015">
+                            <name>Natural Win</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300320&amp;selectionId=1032015" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="79.0">3.05</price>
+                                <price amountUnmatched="3910.0">3.0</price>
+                                <price amountUnmatched="1055.0">2.92</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="78.0">3.1</price>
+                                <price amountUnmatched="3112.0">3.15</price>
+                                <price amountUnmatched="650.0">3.2</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                        <selection id="1032016">
+                            <name>Natural Tie</name>
+                            <resource href="https://api.games.betfair.com/rest/v1/selection/tradeActivity?username=steve@aquacreations.ltd&amp;marketId=8300320&amp;selectionId=1032016" title="Trade Activity" responseType="selectionTradeActivity"/>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices>
+                                <price amountUnmatched="218.0">54.0</price>
+                                <price amountUnmatched="58.0">52.0</price>
+                                <price amountUnmatched="104.0">50.0</price>
+                            </bestAvailableToBackPrices>
+                            <bestAvailableToLayPrices>
+                                <price amountUnmatched="211.0">58.0</price>
+                                <price amountUnmatched="53.0">60.0</price>
+                                <price amountUnmatched="92.0">62.0</price>
+                            </bestAvailableToLayPrices>
+                        </selection>
+                    </selections>
+                </market>
+            </markets>
+        </game>
+    </channel>
+</channelSnapshot>

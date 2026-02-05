@@ -1,0 +1,41 @@
+<channelSnapshot>
+  <shoe>
+    <cardsDealt>216</cardsDealt>
+    <cardsRemaining>200</cardsRemaining>
+    <cardCounts>
+      <card rank="1">16</card>
+      <card rank="2">16</card>
+      <card rank="3">16</card>
+      <card rank="4">16</card>
+      <card rank="5">16</card>
+      <card rank="6">16</card>
+      <card rank="7">16</card>
+      <card rank="8">16</card>
+      <card rank="9">16</card>
+      <card rank="10">16</card>
+      <card rank="11">16</card>
+      <card rank="12">16</card>
+      <card rank="13">16</card>
+    </cardCounts>
+  </shoe>
+  <markets>
+    <market id="m1">
+      <selections type="SideBets">
+        <selection id="1">
+          <selectionId>1</selectionId>
+          <name>Pocket Pair In Any Hand</name>
+          <status>IN_PLAY</status>
+          <bestBackPrice>6.2</bestBackPrice>
+          <bestLayPrice>6.7</bestLayPrice>
+        </selection>
+        <selection id="2">
+          <selectionId>2</selectionId>
+          <name>Natural Win</name>
+          <status>IN_PLAY</status>
+          <bestBackPrice>3.85</bestBackPrice>
+          <bestLayPrice>4.25</bestLayPrice>
+        </selection>
+      </selections>
+    </market>
+  </markets>
+</channelSnapshot>

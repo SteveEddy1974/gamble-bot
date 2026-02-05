@@ -5,3 +5,6 @@ coverage
 flake8
 bandit
 prometheus_client
+selenium
+webdriver-manager
+pyperclip

@@ -1,12 +1,26 @@
 import requests
 import hashlib
+import logging
 from lxml import etree
 from typing import Any, Dict, Optional
 import time
 import json
+import random
+from datetime import datetime
 
 
 class APIClient:
+    """
+    Client for Betfair Games API (per official v1.142 User Guide).
+
+    Authentication uses three HTTP headers:
+    - gamexAPIPassword: plaintext password (HTTPS encrypts connection)
+    - gamexAPIAgent: application ID (e.g., email.AppName.Version)
+    - gamexAPIAgentInstance: unique 32-char MD5 hash per installation
+
+    Note: Games API is free to use, no API keys required.
+    For Exchange API betting, use ExchangeAPIClient instead.
+    """
     BASE_URL = "https://api.games.betfair.com/rest/v1"
 
     def __init__(self, credentials: Dict[str, str]):
@@ -14,17 +28,50 @@ class APIClient:
         self.session = requests.Session()
         self._set_auth_headers()
 
+    def _generate_agent_instance_id(self) -> str:
+        """
+        Generate unique gamexAPIAgentInstance per official spec:
+        1. Current timestamp in ISO format
+        2. Append 5-digit random number
+        3. Append gamexAPIAgent ID
+        4. Return MD5 hash of combined string
+        """
+        timestamp = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+        random_num = random.randint(10000, 99999)
+        agent_id = self.session.headers.get('gamexAPIAgent', 'unknown')
+        combined = f"{timestamp}{random_num}{agent_id}"
+        return hashlib.md5(combined.encode()).hexdigest()
+
     def _set_auth_headers(self):
-        # Example: set headers using MD5 of password
-        md5 = hashlib.md5(self.credentials['password'].encode()).hexdigest()
+        username = (self.credentials or {}).get('username')
+        password = (self.credentials or {}).get('password')
+        if not username or not password:
+            raise ValueError(
+                "Missing Betfair credentials. Set BETFAIR_USERNAME/BETFAIR_PASSWORD env vars "
+                "or populate credentials in config.yaml."
+            )
+
+        # Per official guide: gamexAPIAgent format is email.AppName.Version
+        agent_id = f"{username}.BaccaratBot.1.0"
+
+        # Set headers per official spec (plaintext password, proper agent format)
         self.session.headers.update({
-            'gamexAPIPassword': md5,
-            'gamexAPIAgent': self.credentials['username'],
-            'gamexAPIAgentInstance': md5
+            'gamexAPIPassword': password,  # Plaintext (HTTPS encrypts)
+            'gamexAPIAgent': agent_id
         })
 
-    def get_snapshot(self, channel_id: str) -> Any:
-        url = f"{self.BASE_URL}/channels/{channel_id}/snapshot?selectionsType=SideBets"
+        # Generate unique instance ID after agent is set
+        instance_id = self._generate_agent_instance_id()
+        self.session.headers.update({
+            'gamexAPIAgentInstance': instance_id
+        })
+
+    def get_snapshot(self, channel_id: str, selections_type: Optional[str] = None) -> Any:
+        # Per official spec: must include username in URL query parameter
+        username = self.credentials.get('username')
+        url = f"{self.BASE_URL}/channels/{channel_id}/snapshot?username={username}"
+        if selections_type:
+            url = f"{url}&selectionsType={selections_type}"
         resp = self.session.get(url)
         resp.raise_for_status()
         return etree.fromstring(resp.content)
@@ -39,7 +86,7 @@ class APIClient:
         stake: float,
         selection_id: str,
     ) -> Any:
-        # Build XML payload
+        # Build XML payload per official spec
         payload = f'''
         <postBetOrder xmlns="urn:betfair:games:api:v1" marketId="{market_id}" round="{round_id}" currency="{currency}">
           <totalSizeRequest>
@@ -50,9 +97,35 @@ class APIClient:
           </totalSizeRequest>
         </postBetOrder>
         '''
-        url = f"{self.BASE_URL}/bet/order"
+        # Per official spec: include username in URL
+        username = self.credentials.get('username')
+        url = f"{self.BASE_URL}/bet/order?username={username}"
         resp = self.session.post(url, data=payload, headers={'Content-Type': 'application/xml'})
-        resp.raise_for_status()
+        try:
+            resp.raise_for_status()
+        except Exception as e:
+            request_body = None
+            try:
+                request_body = resp.request.body
+                if isinstance(request_body, bytes):
+                    request_body = request_body.decode('utf-8', errors='replace')
+            except Exception:
+                request_body = '<unavailable>'
+
+            response_text = resp.text
+            if response_text and len(response_text) > 2000:
+                response_text = response_text[:2000] + '...'
+
+            logging.error(
+                'POST /bet/order failed: status=%s url=%s request_body=%s response=%s',
+                resp.status_code,
+                url,
+                request_body,
+                response_text,
+            )
+            raise RuntimeError(
+                f'Bet order failed: status={resp.status_code} response={response_text}'
+            ) from e
         return etree.fromstring(resp.content)
 
 
@@ -66,6 +139,7 @@ class SimulatedAPIClient:
         reset_after: int = None,
         settle_delay: int = 2,
     ):
+        self.start_cards_remaining = start_cards_remaining
         self.cards_remaining = start_cards_remaining
         self.decrement = decrement
         self.reset_after = reset_after
@@ -87,10 +161,16 @@ class SimulatedAPIClient:
         counts_xml = ''.join(counts)
 
         # Vary prices slightly based on counts (simple heuristic)
+        # Add random inefficiency to create betting opportunities
+        import random
         pocket_pressure = max(0, (self.card_counts[1] - 28) / 32)
-        pocket_price = round(5.0 + (self.iteration % 3) * 0.1 - pocket_pressure * 0.2, 3)
+        # Base price with wider inefficiency range to create 5%+ edges
+        pocket_inefficiency = random.uniform(0.4, 1.4)  # Wider range for bigger mispricings
+        pocket_price = round(5.0 * pocket_inefficiency + (self.iteration % 3) * 0.1 - pocket_pressure * 0.2, 3)
+        
         natural_pressure = max(0, (self.card_counts[8] + self.card_counts[9] - 60) / 64)
-        natural_price = round(3.0 + (self.iteration % 5) * 0.05 - natural_pressure * 0.1, 3)
+        natural_inefficiency = random.uniform(0.4, 1.4)
+        natural_price = round(3.0 * natural_inefficiency + (self.iteration % 5) * 0.05 - natural_pressure * 0.1, 3)
 
         # If any bets are due for settlement, produce settlement XML entries
         settlements = []
@@ -153,24 +233,36 @@ class SimulatedAPIClient:
         xml = '\n'.join(xml_parts)
         return xml.encode("utf-8")
 
-    def get_snapshot(self, channel_id: str) -> Any:
+    def get_snapshot(self, channel_id: str, selections_type: Optional[str] = None) -> Any:
         # On each call, decrement cards_remaining and simulate reset
-        if self.reset_after and self.iteration >= self.reset_after:
-            self.cards_remaining = 416
+        if self.reset_after and self.iteration > 0 and self.iteration % self.reset_after == 0:
+            # Reset shoe every reset_after iterations (return a full shoe snapshot on reset)
+            self.cards_remaining = self.start_cards_remaining if hasattr(self, 'start_cards_remaining') else 416
             # reset card counts
+            decks = self.cards_remaining / 52.0
             self.card_counts = {
-                r: max(0, int(round(4 * (self.cards_remaining / 52.0))))
+                r: max(0, int(round(4 * decks)))
                 for r in range(1, 14)
             }
-            self.iteration = 0
-        else:
+            # Return a full snapshot immediately on reset without decrementing
+            xml = self._generate_snapshot()
+            self._current_raw_snapshot = xml
+            self.iteration += 1
+            return etree.fromstring(xml)
+        
+        if self.cards_remaining > 0:
             # Decrease card counts in a round-robin way to simulate dealing
             to_remove = self.decrement
             r = (self.iteration % 13) + 1
-            while to_remove > 0:
+            attempts = 0
+            max_attempts = 13  # One full cycle through all ranks
+            while to_remove > 0 and attempts < max_attempts:
                 if self.card_counts.get(r, 0) > 0:
                     self.card_counts[r] -= 1
                     to_remove -= 1
+                    attempts = 0  # Reset attempts when we successfully remove a card
+                else:
+                    attempts += 1
                 r = r % 13 + 1
             # Decrease but don't go below 0
             self.cards_remaining = max(0, self.cards_remaining - self.decrement)

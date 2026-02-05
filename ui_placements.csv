@@ -1,0 +1,70 @@
+timestamp,bet_type,price,stake,auto_submit,confirmed,result
+2026-02-03T18:22:40.399076Z,Pocket Pair In Any Hand,10.0,0.5,True,True,Selection element not found on page; opened page for manual placement. Stake copied to clipboard.
+2026-02-03T18:27:20.253607Z,Pocket Pair In Any Hand,10.0,0.5,True,True,Stake input not found; please paste stake from clipboard and place the bet manually.
+2026-02-04T09:42:53.063270Z,Pocket Pair In Any Hand,10.0,0.5,True,True,Bet type 'Pocket Pair In Any Hand' not found in side bets table.
+2026-02-04T09:52:29.875408Z,Pocket Pair In Any Hand,10.0,0.5,True,True,Bet type 'Pocket Pair In Any Hand' not found in side bets table.
+2026-02-04T10:04:09.043089Z,Pocket Pair In Any Hand,10.0,0.5,True,True,Bet type 'Pocket Pair In Any Hand' not found in side bets table.
+2026-02-04T10:20:43.984703Z,Pocket Pair In Any Hand,10.0,0.5,True,True,Bet type 'Pocket Pair In Any Hand' not found in side bets table.
+2026-02-04T10:31:30.155271Z,any,10.0,0.5,True,True,Bet submitted successfully
+2026-02-04T10:37:26.166548Z,any,10.0,0.5,True,True,Stake input not found in bet slip
+2026-02-04T10:45:10.784149Z,any,10.0,0.5,True,True,Stake input not found in bet slip
+2026-02-04T11:17:08.190426Z,any,10.0,0.5,True,True,Stake input not found in bet slip
+2026-02-04T11:18:21.391619Z,any,10.0,0.5,True,True,Stake input not found in bet slip
+2026-02-04T11:19:18.135085Z,any,10.0,0.5,True,True,"Could not enter stake: Message: invalid element state
+  (Session info: chrome=144.0.7559.132)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6eb2df3d5
+	0x7ff6eb2df430
+	0x7ff6eb080ea6
+	0x7ff6eb0d13d3
+	0x7ff6eb10589a
+	0x7ff6eb0ce766
+	0x7ff6eb129d08
+	0x7ff6eb0ccb0c
+	0x7ff6eb0cda53
+	0x7ff6eb5bb470
+	0x7ff6eb5b586d
+	0x7ff6eb5d621a
+	0x7ff6eb2fb235
+	0x7ff6eb303a5c
+	0x7ff6eb2e8844
+	0x7ff6eb2e89f6
+	0x7ff6eb2ceb87
+	0x7ffb291ae8d7
+	0x7ffb2a14c53c
+"
+2026-02-04T11:19:54.199474Z,any,10.0,0.5,True,True,Bet submitted successfully
+2026-02-04T11:23:11.838788Z,any,10.0,0.5,True,True,Bet submitted (could not verify)
+2026-02-04T11:25:47.829870Z,any,10.0,0.5,True,True,Timed out waiting for side bets to become available
+2026-02-04T11:36:40.938926Z,any,10.0,0.5,True,True,Timed out waiting for side bets to become available
+2026-02-04T13:01:29.664034Z,any,10.0,0.5,True,True,Stake input not found in bet slip
+2026-02-04T13:02:37.123183Z,any,10.0,0.5,True,True,Stake input not found in bet slip
+2026-02-04T13:06:22.353501Z,any,10.0,0.5,True,True,Stake input not found in bet slip
+2026-02-04T13:09:28.548306Z,any,10.0,0.5,True,True,Bet submitted (appears to be accepted)
+2026-02-04T13:20:59.756642Z,any,10.0,2.0,True,True,Stake input not found in bet slip
+2026-02-04T13:23:17.966162Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T13:24:28.347510Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T13:25:24.822129Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T13:27:21.821793Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T13:29:18.329466Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T13:38:53.215132Z,any,10.0,2.0,True,True,Timed out waiting for side bets to become available
+2026-02-04T13:45:44.992410Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T13:55:47.535437Z,any,10.0,2.0,True,True,Bet submitted (appears to be accepted)
+2026-02-04T13:57:40.495126Z,any,10.0,2.0,True,True,Bet submitted (appears to be accepted)
+2026-02-04T14:00:20.796025Z,any,10.0,2.0,True,True,Bet submitted and verified in My Bets
+2026-02-04T14:01:06.717531Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T14:02:24.973345Z,any,10.0,2.0,True,True,Bet submitted (appears to be accepted)
+2026-02-04T14:05:18.008171Z,any,10.0,2.0,True,True,Bet submitted but REJECTED - does not appear in My Bets
+2026-02-04T14:07:42.102991Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T14:12:01.377679Z,any,10.0,2.0,True,True,Could not open bet slip
+2026-02-04T14:17:42.494386Z,any,10.0,2.0,True,True,Place Bet(s) button not found after Submit
+2026-02-04T14:21:22.864370Z,any,10.0,2.0,True,True,Bet submitted but REJECTED - does not appear in My Bets
+2026-02-04T14:34:54.675250Z,Banker Pair,10.0,1.0,True,True,Bet type 'Banker Pair' not found
+2026-02-04T15:03:23.586641Z,any,10.0,1.0,True,True,Stake input not found in bet slip
+2026-02-04T15:05:42.638056Z,any,10.0,1.0,True,True,Stake input not found in bet slip
+2026-02-04T15:09:39.655892Z,any,10.0,1.0,True,True,Place Bet(s) button not found after Submit
+2026-02-04T15:21:06.129905Z,Highest Hand Has Nine,4.45,2.0,False,True,Auto-submit disabled; stake entered. Please submit manually.
+2026-02-04T15:32:59.969739Z,any,10.0,2.0,True,True,exception:name 'back_cells' is not defined
+2026-02-04T15:47:20.664914Z,any,10.0,2.0,True,True,exception:name 'back_cells' is not defined
+2026-02-04T15:58:33.782052Z,any,10.0,0.5,True,True,Stake input not found in bet slip

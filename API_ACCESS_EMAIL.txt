@@ -1,0 +1,30 @@
+Subject: Exchange Games API - Ready to Use (Confirmation)
+
+Dear Betfair Developer Support,
+
+I'm writing to confirm I'm ready to use the Exchange Games API for personal betting.
+
+Account email: steve@aquacreations.ltd
+
+Setup Status:
+✅ Games API authentication implemented (per v1.142 User Guide)
+✅ Terms & Conditions accepted on games.betfair.com
+✅ Bot tested in simulation mode (10,000+ iterations)
+✅ Ready for live testing with small stakes
+
+Intended usage (personal only)
+- Automated betting for my own account (non-commercial; not distributed; no data resale)
+- Conservative request rate (polling ~every 3 seconds during active sessions)
+- Responsible gambling controls (exposure limits, stop-loss/circuit-breakers, manual override)
+
+Questions
+1) Can you enable Developer/API access for my account so I can create a Delayed Application Key?
+2) Is Exchange Games API access available for personal use, and if so what additional approval is required?
+
+I’ve attached a short application overview with technical details and safeguards.
+
+Kind regards,
+Steve
+steve@aquacreations.ltd
+
+Attachment: BETFAIR_API_ACCESS_APPLICATION.md

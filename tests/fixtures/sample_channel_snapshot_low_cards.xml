@@ -1,0 +1,37 @@
+<channelSnapshot>
+  <shoe>
+    <cardsDealt>410</cardsDealt>
+    <cardsRemaining>6</cardsRemaining>
+    <cardCounts>
+      <card rank="1">1</card>
+      <card rank="2">1</card>
+      <card rank="3">1</card>
+      <card rank="4">1</card>
+      <card rank="5">1</card>
+      <card rank="6">1</card>
+      <card rank="7">0</card>
+      <card rank="8">0</card>
+      <card rank="9">0</card>
+      <card rank="10">0</card>
+      <card rank="11">0</card>
+      <card rank="12">0</card>
+      <card rank="13">0</card>
+    </cardCounts>
+  </shoe>
+  <marketSelections>
+    <selection>
+      <selectionId>1</selectionId>
+      <name>Pocket Pair In Any Hand</name>
+      <status>IN_PLAY</status>
+      <bestBackPrice>10.0</bestBackPrice>
+      <bestLayPrice>10.5</bestLayPrice>
+    </selection>
+    <selection>
+      <selectionId>2</selectionId>
+      <name>Natural Win</name>
+      <status>IN_PLAY</status>
+      <bestBackPrice>5.0</bestBackPrice>
+      <bestLayPrice>5.5</bestLayPrice>
+    </selection>
+  </marketSelections>
+</channelSnapshot>
