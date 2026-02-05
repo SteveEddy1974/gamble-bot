@@ -8,3 +8,5 @@ prometheus_client
 selenium
 webdriver-manager
 pyperclip
+pytest
+pytest-cov
