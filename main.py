@@ -1,14 +1,15 @@
 import time
 import argparse
 import logging
+import os
 from typing import Any, Dict, Optional, List
 
 import yaml
 
 from api_client import APIClient, SimulatedAPIClient
-from engine import evaluate, size_stake
+from engine import evaluate, size_stake, calculate_dynamic_max_stake_pct
 from executor import Executor
-from probabilities import prob_pocket_pair, prob_natural_win
+from probabilities import prob_pocket_pair, prob_natural_win, prob_natural_tie, prob_highest_hand_nine, prob_highest_hand_odd
 from models import ShoeState, MarketSelection, Opportunity
 
 CONFIG_PATH = "config.yaml"
@@ -16,7 +17,34 @@ CONFIG_PATH = "config.yaml"
 
 def load_config() -> Dict[str, Any]:
     with open(CONFIG_PATH, 'r') as f:
-        return yaml.safe_load(f)
+        config: Dict[str, Any] = yaml.safe_load(f) or {}
+
+    # Optional environment overrides (avoid storing secrets in config.yaml)
+    credentials = config.get('credentials')
+    if not isinstance(credentials, dict):
+        credentials = {}
+        config['credentials'] = credentials
+
+    username_env = os.getenv('BETFAIR_USERNAME')
+    password_env = os.getenv('BETFAIR_PASSWORD')
+    if username_env:
+        credentials['username'] = username_env
+    if password_env:
+        credentials['password'] = password_env
+
+    bot = config.get('bot')
+    if not isinstance(bot, dict):
+        bot = {}
+        config['bot'] = bot
+
+    exchange_app_key_env = os.getenv('BETFAIR_EXCHANGE_APP_KEY')
+    exchange_session_token_env = os.getenv('BETFAIR_EXCHANGE_SESSION_TOKEN')
+    if exchange_app_key_env:
+        bot['exchange_app_key'] = exchange_app_key_env
+    if exchange_session_token_env:
+        bot['exchange_session_token'] = exchange_session_token_env
+
+    return config
 
 
 def setup_logging(config: Dict[str, Any]) -> None:
@@ -44,6 +72,37 @@ def detect_shoe_reset(prev_cards_remaining: int, curr_cards_remaining: int, thre
 
 
 def parse_shoe_state(shoe_elem: Any) -> ShoeState:
+    """Parse shoe state from either old simple format or new API format."""
+    # Check if this is the new API format (object with properties)
+    if shoe_elem.tag.endswith('object') and shoe_elem.get('name') == 'Shoe':
+        # New format: <object name="Shoe"><property name="X" value="Y" /></object>
+        props = {}
+        ns = {'bf': 'urn:betfair:games:api:v1'}
+        for prop in shoe_elem.findall('.//bf:property', ns):
+            name = prop.get('name')
+            value = prop.get('value')
+            props[name] = value
+        
+        # Also handle without namespace
+        if not props:
+            for prop in shoe_elem.findall('.//property'):
+                name = prop.get('name')
+                value = prop.get('value')
+                props[name] = value
+        
+        cards_remaining = int(props.get('cardsRemaining', 0))
+        cards_dealt = int(props.get('cardsDealt', 0))
+        
+        # Parse card counts: Card 1 through Card 13 (Ace through King)
+        card_counts = {}
+        for rank in range(1, 14):
+            key = f'Card {rank}'
+            if key in props:
+                card_counts[rank] = int(props[key])
+        
+        return ShoeState(cards_dealt, cards_remaining, card_counts)
+    
+    # Old simple format fallback
     cards_dealt = int(shoe_elem.find('cardsDealt').text)
     cards_remaining = int(shoe_elem.find('cardsRemaining').text)
     card_counts: dict = {}
@@ -55,7 +114,78 @@ def parse_shoe_state(shoe_elem: Any) -> ShoeState:
 
 
 def parse_market_selections(selections_elem: Any) -> List[MarketSelection]:
+    """Parse market selections from either old simple format or new API format."""
     selections: List[MarketSelection] = []
+    ns = {'bf': 'urn:betfair:games:api:v1'}
+    
+    # Try new API format first
+    sel_list = selections_elem.findall('.//bf:selection', ns)
+    if not sel_list:
+        # Try without namespace
+        sel_list = selections_elem.findall('.//selection')
+    
+    if sel_list:
+        # New API format
+        for sel in sel_list:
+            # Get selection ID and name
+            sel_id_elem = sel.find('.//bf:id', ns)
+            if sel_id_elem is None:
+                sel_id_elem = sel.find('.//id')
+            # also accept <selectionId> tag used in some fixtures
+            if sel_id_elem is None:
+                sel_id_elem = sel.find('.//bf:selectionId', ns) or sel.find('.//selectionId')
+            if sel_id_elem is None:
+                sel_id_elem = sel.get('id')
+            
+            name_elem = sel.find('.//bf:name', ns)
+            if name_elem is None:
+                name_elem = sel.find('.//name')
+            
+            status_elem = sel.find('.//bf:status', ns)
+            if status_elem is None:
+                status_elem = sel.find('.//status')
+            
+            selection_id = sel_id_elem if isinstance(sel_id_elem, str) else (sel_id_elem.text if sel_id_elem is not None else sel.get('id'))
+            name = name_elem.text if name_elem is not None else 'Unknown'
+            status = status_elem.text if status_elem is not None else 'UNKNOWN'
+            
+            # Parse best prices
+            best_back_price = None
+            best_lay_price = None
+            
+            back_prices = sel.find('.//bf:bestAvailableToBackPrices', ns)
+            if back_prices is None:
+                back_prices = sel.find('.//bestAvailableToBackPrices')
+            if back_prices is not None:
+                first_price = back_prices.find('.//bf:price', ns)
+                if first_price is None:
+                    first_price = back_prices.find('.//price')
+                if first_price is not None and first_price.text:
+                    best_back_price = float(first_price.text)
+            # also accept simple <bestBackPrice> tag used in some snapshots
+            if best_back_price is None:
+                bb = sel.find('.//bf:bestBackPrice', ns) or sel.find('.//bestBackPrice')
+                if bb is not None and bb.text:
+                    best_back_price = float(bb.text)
+            
+            lay_prices = sel.find('.//bf:bestAvailableToLayPrices', ns)
+            if lay_prices is None:
+                lay_prices = sel.find('.//bestAvailableToLayPrices')
+            if lay_prices is not None:
+                first_price = lay_prices.find('.//bf:price', ns)
+                if first_price is None:
+                    first_price = lay_prices.find('.//price')
+                if first_price is not None and first_price.text:
+                    best_lay_price = float(first_price.text)
+            # also accept simple <bestLayPrice> tag
+            if best_lay_price is None:
+                bl = sel.find('.//bf:bestLayPrice', ns) or sel.find('.//bestLayPrice')
+                if bl is not None and bl.text:
+                    best_lay_price = float(bl.text)            
+            selections.append(MarketSelection(selection_id, name, status, best_back_price, best_lay_price))
+        return selections
+    
+    # Old simple format fallback
     for sel in selections_elem.findall('selection'):
         selection_id = sel.find('selectionId').text
         name = sel.find('name').text
@@ -145,6 +275,12 @@ class BetManager:
         self.pnl += profit
         self.trade_history.append({'bet_id': bet_id, 'profit': profit, 'balance': self.balance})
         return profit
+
+
+def is_balance_sufficient_for_live(bet_manager: BetManager, config: dict) -> bool:
+    """Return True when balance meets configured minimum stake requirement for live placements."""
+    min_stake = config.get('bot', {}).get('min_stake', 2.0)
+    return bet_manager.balance >= min_stake
 
 
 def reconcile_cleared_orders(
@@ -267,6 +403,149 @@ def reconcile_cleared_orders(
     return state
 
 
+def evaluate_bet_opportunity(
+    sel: MarketSelection,
+    bet_name: str,
+    prob_func: callable,
+    shoe: ShoeState,
+    bet_manager: BetManager,
+    executor: Executor,
+    config: dict,
+    market_id: str,
+    round_id: str,
+    last_bet_time: dict,
+    min_edge: float,
+    min_price: Optional[float],
+    cooldown_seconds: int,
+) -> bool:
+    """
+    Evaluate and potentially place a bet for a given selection.
+    Returns True if bet was attempted (successful or not), False if skipped.
+    """
+    if not sel.best_back_price:
+        return False
+        
+    # Check price filter
+    if min_price is not None and sel.best_back_price < min_price:
+        return False
+        
+    # Check cooldown
+    if cooldown_seconds:
+        last_time = last_bet_time.get(str(sel.selection_id), 0)
+        if time.time() - last_time < cooldown_seconds:
+            return False
+            
+    # Calculate probability and edge
+    prob = prob_func(shoe)
+    ok, edge = evaluate(sel, prob, sel.best_back_price, 'BACK', min_edge=min_edge)
+    if not ok:
+        return False
+        
+    # Calculate stake
+    dynamic_max_stake_pct = calculate_dynamic_max_stake_pct(bet_manager.balance)
+    stake = size_stake(
+        bet_manager.balance,
+        config['bot']['max_exposure_pct'],
+        edge,
+        price=sel.best_back_price,
+        true_prob=prob,
+        shrink=config['bot'].get('kelly_factor', 0.25),
+        max_stake_pct=dynamic_max_stake_pct,
+    )
+    
+    # Enforce minimum stake
+    min_stake = config['bot'].get('min_stake', 2.0)
+    if stake < min_stake:
+        logging.warning(
+            'Stake below minimum; raising to min_stake: stake=%s min_stake=%s',
+            stake,
+            min_stake,
+        )
+        stake = min_stake
+        
+    # Check if can place
+    if not bet_manager.can_place(stake):
+        msg = (
+            f'Skipping {bet_name} opportunity due to exposure/balance limits: '
+            f'stake={stake} exposure={bet_manager.current_exposure}/{bet_manager.max_exposure} balance={bet_manager.balance}'
+        )
+        logging.warning(msg)
+        try:
+            from alerts import send_alert
+            send_alert(config, msg, level='WARNING')
+        except Exception:
+            pass
+        return False
+        
+    # Create opportunity
+    opp = Opportunity(sel, prob, sel.best_back_price, edge, 'BACK', stake)
+    logging.info('Opportunity: %s', opp)
+    
+    # Handle placement (simulated or live)
+    def _handle_response(resp, is_live=False):
+        status_el = resp.find('status') if resp is not None else None
+        status = status_el.text if status_el is not None else str(resp)
+        logging.info('Placed %s bet: status=%s', 'live' if is_live else 'simulated', status)
+        if status == 'ACCEPTED':
+            last_bet_time[str(sel.selection_id)] = time.time()
+            bet_id_el = resp.find('betId')
+            bet_id = bet_id_el.text if bet_id_el is not None else None
+            if bet_id:
+                bet_manager.record_accepted(bet_id, opp)
+                logging.info('Bet recorded: betId=%s stake=%s', bet_id, stake)
+                logging.info(
+                    'Exposure after placement: %s/%s Balance: %s',
+                    bet_manager.current_exposure,
+                    bet_manager.max_exposure,
+                    bet_manager.balance,
+                )
+                try:
+                    from metrics import inc_bet_accepted
+                    inc_bet_accepted()
+                except Exception:
+                    pass
+            else:
+                logging.warning('Accepted bet without betId; cannot track precisely')
+    
+    if config['bot'].get('simulate_place_bets', False):
+        try:
+            resp = executor.place_bet(market_id, round_id, opp)
+            _handle_response(resp, is_live=False)
+        except Exception as e:
+            logging.error('Error placing simulated bet: %s', e)
+    else:
+        # Live placement with operator gating
+        try:
+            min_stake = config['bot'].get('min_stake', 2.0)
+            if bet_manager.balance < min_stake:
+                logging.error('Balance below min_stake; disabling live placements: balance=%s min_stake=%s', bet_manager.balance, min_stake)
+                try:
+                    from alerts import send_alert
+                    send_alert(config, f'Balance below min_stake: {bet_manager.balance} < {min_stake}', level='ERROR')
+                except Exception:
+                    pass
+                return False
+                
+            from operator_gate import is_live_allowed
+            if not is_live_allowed(config):
+                logging.warning('Live betting is disabled by operator gating; skipping placement')
+                try:
+                    from alerts import send_alert
+                    send_alert(config, 'Live betting attempt blocked by gating', level='WARNING')
+                except Exception:
+                    pass
+            else:
+                try:
+                    resp = executor.place_bet(market_id, round_id, opp)
+                    _handle_response(resp, is_live=True)
+                except Exception as e:
+                    logging.error('Error placing live bet: %s', e)
+        except Exception:
+            logging.exception('Error checking operator gating')
+            
+    return True
+
+
 def main(iterations: Optional[int] = None, override_poll_interval: Optional[float] = None) -> None:
     config = load_config()
     setup_logging(config)
@@ -321,13 +600,86 @@ def main(iterations: Optional[int] = None, override_poll_interval: Optional[floa
         pass
 
     loops = 0
+    last_bet_time: Dict[str, float] = {}
     while iterations is None or loops < iterations:
         try:
             xml_root = api_client.get_snapshot(channel_id)
-            shoe_elem = xml_root.find('shoe')
-            selections_elem = xml_root.find('marketSelections')
+            
+            # Define namespace for new API format
+            ns = {'bf': 'urn:betfair:games:api:v1'}
+            
+            # Parse shoe state from gameData/object[@name='Shoe']
+            game_data = xml_root.find('.//bf:gameData', ns)
+            if game_data is None:
+                game_data = xml_root.find('.//gameData')
+            
+            shoe_elem = None
+            if game_data is not None:
+                for obj in game_data.findall('.//bf:object', ns):
+                    if obj.get('name') == 'Shoe':
+                        shoe_elem = obj
+                        break
+                # Try without namespace if not found
+                if shoe_elem is None:
+                    for obj in game_data.findall('.//object'):
+                        if obj.get('name') == 'Shoe':
+                            shoe_elem = obj
+                            break
+            
+            # Fallback to old format if new format not found
+            if shoe_elem is None:
+                shoe_elem = xml_root.find('shoe')
+            
+            # Parse market selections from markets/market/selections
+            markets = xml_root.find('.//bf:markets', ns)
+            if markets is None:
+                markets = xml_root.find('.//markets')
+            
+            market = None
+            if markets is not None:
+                for m in markets.findall('.//bf:market', ns) or markets.findall('.//market'):
+                    sel_elem = m.find('.//bf:selections', ns)
+                    if sel_elem is None:
+                        sel_elem = m.find('.//selections')
+                    if sel_elem is not None and sel_elem.get('type') == 'SideBets':
+                        market = m
+                        break
+                if market is None:
+                    market = markets.find('.//bf:market', ns) or markets.find('.//market')
+            
+            selections_elem = None
+            if market is not None:
+                selections_elem = market.find('.//bf:selections', ns)
+                if selections_elem is None:
+                    selections_elem = market.find('.//selections')
+            
+            # Fallback to old format
+            if selections_elem is None:
+                selections_elem = xml_root.find('marketSelections')
+            
+            if shoe_elem is None or selections_elem is None:
+                logging.warning('Missing shoe or selections data, skipping iteration')
+                time.sleep(poll_interval)
+                continue
+            
             shoe = parse_shoe_state(shoe_elem)
             selections = parse_market_selections(selections_elem)
+
+            # Update market/round identifiers from live snapshot when available
+            try:
+                if market is not None and market.get('id'):
+                    market_id = market.get('id')
+                game_elem = xml_root.find('.//bf:game', ns)
+                if game_elem is None:
+                    game_elem = xml_root.find('.//game')
+                if game_elem is not None:
+                    round_elem = game_elem.find('.//bf:round', ns)
+                    if round_elem is None:
+                        round_elem = game_elem.find('.//round')
+                    if round_elem is not None and round_elem.text:
+                        round_id = round_elem.text
+            except Exception:
+                pass
 
             # Shoe reset detection
             if last_cards_remaining is not None and detect_shoe_reset(last_cards_remaining, shoe.cards_remaining):
@@ -387,152 +739,59 @@ def main(iterations: Optional[int] = None, override_poll_interval: Optional[floa
                         logging.error(f'Error reconciling cleared orders: {e}')
                     last_cleared_poll = now
 
-            # Evaluate opportunities for Pocket Pair and Natural Win
+            # Evaluate opportunities for all bet types
+            min_price = config['bot'].get('min_price')
+            cooldown_seconds = config['bot'].get('bet_cooldown_seconds', 0)
+            trade_natural = config['bot'].get('trade_natural_win', True)
+            trade_pocket = config['bot'].get('trade_pocket_pair', True)
+            trade_natural_tie = config['bot'].get('trade_natural_tie', False)
+            trade_highest_nine = config['bot'].get('trade_highest_nine', False)
+            trade_highest_odd = config['bot'].get('trade_highest_odd', False)
+            
             for sel in selections:
                 if sel.status != 'IN_PLAY':
                     continue
-                if sel.name == 'Pocket Pair In Any Hand' and sel.best_back_price:
-                    prob = prob_pocket_pair(shoe)
-                    ok, edge = evaluate(sel, prob, sel.best_back_price, 'BACK')
-                    if ok:
-                        stake = size_stake(
-                            bet_manager.balance,
-                            config['bot']['max_exposure_pct'],
-                            edge,
-                            price=sel.best_back_price,
-                            true_prob=prob,
-                        )
-                        if not bet_manager.can_place(stake):
-                            msg = (
-                                'Skipping Pocket Pair opportunity due to exposure/balance limits: '
-                                f'stake={stake} exposure={bet_manager.current_exposure}/{bet_manager.max_exposure} balance={bet_manager.balance}'
-                            )
-                            logging.warning(msg)
-                            try:
-                                from alerts import send_alert
-                                send_alert(config, msg, level='WARNING')
-                            except Exception:
-                                pass
-                        else:
-                            opp = Opportunity(sel, prob, sel.best_back_price, edge, 'BACK', stake)
-                            logging.info('Opportunity: %s', opp)
-
-                            def _handle_response(resp, is_live=False):
-                                status_el = resp.find('status') if resp is not None else None
-                                status = status_el.text if status_el is not None else str(resp)
-                                logging.info('Placed %s bet: status=%s', 'live' if is_live else 'simulated', status)
-                                if status == 'ACCEPTED':
-                                    bet_id_el = resp.find('betId')
-                                    bet_id = bet_id_el.text if bet_id_el is not None else None
-                                    if bet_id:
-                                        bet_manager.record_accepted(bet_id, opp)
-                                        logging.info('Bet recorded: betId=%s stake=%s', bet_id, stake)
-                                        logging.info(
-                                            'Exposure after placement: %s/%s Balance: %s',
-                                            bet_manager.current_exposure,
-                                            bet_manager.max_exposure,
-                                            bet_manager.balance,
-                                        )
-                                        try:
-                                            from metrics import inc_bet_accepted
-                                            inc_bet_accepted()
-                                        except Exception:
-                                            pass
-                                    else:
-                                        logging.warning('Accepted bet without betId; cannot track precisely')
-
-                            if config['bot'].get('simulate_place_bets', False):
-                                try:
-                                    resp = executor.place_bet(market_id, round_id, opp)
-                                    _handle_response(resp, is_live=False)
-                                except Exception as e:
-                                    logging.error('Error placing simulated bet: %s', e)
-                            else:
-                                # Live: require operator token and explicit live_enabled
-                                try:
-                                    from operator_gate import is_live_allowed
-                                    if not is_live_allowed(config):
-                                        logging.warning('Live betting is disabled by operator gating; skipping placement')
-                                        try:
-                                            from alerts import send_alert
-                                            send_alert(config, 'Live betting attempt blocked by gating', level='WARNING')
-                                        except Exception:
-                                            pass
-                                    else:
-                                        try:
-                                            resp = executor.place_bet(market_id, round_id, opp)
-                                            _handle_response(resp, is_live=True)
-                                        except Exception as e:
-                                            logging.error('Error placing live bet: %s', e)
-                                except Exception:
-                                    logging.exception('Error checking operator gating')
-                if sel.name == 'Natural Win' and sel.best_back_price:
-                    prob = prob_natural_win(shoe)
-                    ok, edge = evaluate(sel, prob, sel.best_back_price, 'BACK')
-                    if ok:
-                        stake = size_stake(
-                            bet_manager.balance,
-                            config['bot']['max_exposure_pct'],
-                            edge,
-                            price=sel.best_back_price,
-                            true_prob=prob,
-                        )
-                        if not bet_manager.can_place(stake):
-                            msg = (
-                                'Skipping Natural Win opportunity due to exposure/balance limits: '
-                                f'stake={stake} exposure={bet_manager.current_exposure}/{bet_manager.max_exposure} balance={bet_manager.balance}'
-                            )
-                            logging.warning(msg)
-                            try:
-                                from alerts import send_alert
-                                send_alert(config, msg, level='WARNING')
-                            except Exception:
-                                pass
-                        else:
-                            opp = Opportunity(sel, prob, sel.best_back_price, edge, 'BACK', stake)
-                            logging.info('Opportunity: %s', opp)
-                            if config['bot'].get('simulate_place_bets', False):
-                                try:
-                                    resp = executor.place_bet(market_id, round_id, opp)
-                                    status_el = resp.find('status') if resp is not None else None
-                                    status = status_el.text if status_el is not None else str(resp)
-                                    logging.info('Placed simulated bet: status=%s', status)
-                                    if status == 'ACCEPTED':
-                                        bet_id_el = resp.find('betId')
-                                        bet_id = bet_id_el.text if bet_id_el is not None else None
-                                        if bet_id:
-                                            bet_manager.record_accepted(bet_id, opp)
-                                            logging.info('Bet recorded: betId=%s stake=%s', bet_id, stake)
-                                            logging.info(
-                                                'Exposure after placement: %s/%s Balance: %s',
-                                                bet_manager.current_exposure,
-                                                bet_manager.max_exposure,
-                                                bet_manager.balance,
-                                            )
-                                            try:
-                                                from metrics import inc_bet_accepted
-                                                inc_bet_accepted()
-                                            except Exception:
-                                                pass
-                                        else:
-                                            logging.warning('Accepted bet without betId; cannot track precisely')
-                                except Exception as e:
-                                    logging.error('Error placing simulated bet: %s', e)
-                            else:
-                                # Live placement is gated — operator must explicitly enable and supply token
-                                try:
-                                    from operator_gate import is_live_allowed
-                                    if not is_live_allowed(config):
-                                        logging.warning('Live betting is disabled by operator gating; skipping placement')
-                                        try:
-                                            from alerts import send_alert
-                                            send_alert(config, 'Live betting attempt blocked by gating', level='WARNING')
-                                        except Exception:
-                                            pass
-                                    else:
-                                        logging.info('Operator gating passed. Live placement is supported but disabled by default in this canary flow.')
-                                except Exception:
-                                    logging.exception('Error checking operator gating')
+                    
+                # Pocket Pair In Any Hand
+                if sel.name == 'Pocket Pair In Any Hand' and trade_pocket:
+                    evaluate_bet_opportunity(
+                        sel, 'Pocket Pair', prob_pocket_pair, shoe,
+                        bet_manager, executor, config, market_id, round_id,
+                        last_bet_time, min_edge, min_price, cooldown_seconds
+                    )
+                    
+                # Natural Win
+                elif sel.name == 'Natural Win' and trade_natural:
+                    evaluate_bet_opportunity(
+                        sel, 'Natural Win', prob_natural_win, shoe,
+                        bet_manager, executor, config, market_id, round_id,
+                        last_bet_time, min_edge, min_price, cooldown_seconds
+                    )
+                    
+                # Natural Tie
+                elif sel.name == 'Natural Tie' and trade_natural_tie:
+                    evaluate_bet_opportunity(
+                        sel, 'Natural Tie', prob_natural_tie, shoe,
+                        bet_manager, executor, config, market_id, round_id,
+                        last_bet_time, min_edge, min_price, cooldown_seconds
+                    )
+                    
+                # Highest Hand Has Nine
+                elif sel.name == 'Highest Hand Has Nine' and trade_highest_nine:
+                    evaluate_bet_opportunity(
+                        sel, 'Highest Hand Has Nine', prob_highest_hand_nine, shoe,
+                        bet_manager, executor, config, market_id, round_id,
+                        last_bet_time, min_edge, min_price, cooldown_seconds
+                    )
+                    
+                # Highest Hand Is Odd
+                elif sel.name == 'Highest Hand Is Odd' and trade_highest_odd:
+                    evaluate_bet_opportunity(
+                        sel, 'Highest Hand Is Odd', prob_highest_hand_odd, shoe,
+                        bet_manager, executor, config, market_id, round_id,
+                        last_bet_time, min_edge, min_price, cooldown_seconds
+                    )
+                    
         except Exception as e:
             logging.error(f'Error in main loop: {e}')
         time.sleep(poll_interval)

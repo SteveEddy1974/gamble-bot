@@ -1,0 +1,92 @@
+<channelSnapshot xmlns="urn:betfair:games:api:v1">
+    <channel id="1444086" name="Exchange Baccarat" gameType="BACCARAT">
+        <status>RUNNING</status>
+        <game id="102191209">
+            <round>4</round>
+            <bettingWindowTime>18</bettingWindowTime>
+            <bettingWindowPercentageComplete>0</bettingWindowPercentageComplete>
+            <gameData>
+                <object name="Player">
+                    <description>1 point</description>
+                    <status>HIT</status>
+                    <property name="Card 1" value="8"/>
+                    <property name="Card 2" value="40"/>
+                </object>
+                <object name="Banker">
+                    <description>5 points</description>
+                    <status>IN_PLAY</status>
+                    <property name="Card 1" value="49"/>
+                    <property name="Card 2" value="17"/>
+                </object>
+                <object name="Shoe">
+                    <description>Baccarat Shoe Information</description>
+                    <status>N/A</status>
+                    <property name="cardsDealt" value="4"/>
+                    <property name="cardsRemaining" value="412"/>
+                    <property name="Card 1" value="32"/>
+                    <property name="Card 2" value="31"/>
+                    <property name="Card 3" value="32"/>
+                    <property name="Card 4" value="32"/>
+                    <property name="Card 5" value="31"/>
+                    <property name="Card 6" value="32"/>
+                    <property name="Card 7" value="32"/>
+                    <property name="Card 8" value="32"/>
+                    <property name="Card 9" value="31"/>
+                    <property name="Card 10" value="32"/>
+                    <property name="Card 11" value="31"/>
+                    <property name="Card 12" value="32"/>
+                    <property name="Card 13" value="32"/>
+                </object>
+                <object name="Scorecard">
+                    <description>Baccarat Scorecard Information</description>
+                    <status>N/A</status>
+                    <property name="Content" value=""/>
+                </object>
+            </gameData>
+            <markets currency="GBP">
+                <market id="8300272" nextId="8300320">
+                    <status>SUSPENDED_GAME_ROUND_OVER</status>
+                    <commissionRate>2.5</commissionRate>
+                    <marketType>ANY_NUMBER_OF_WINNERS</marketType>
+                    <selections type="SideBets">
+                        <selection id="1032012">
+                            <name>Pocket Pair In Any Hand</name>
+                            <status>LOSER</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices/>
+                            <bestAvailableToLayPrices/>
+                        </selection>
+                        <selection id="1032013">
+                            <name>Highest Hand Has Nine</name>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices/>
+                            <bestAvailableToLayPrices/>
+                        </selection>
+                        <selection id="1032014">
+                            <name>Highest Hand Is Odd</name>
+                            <status>IN_PLAY</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices/>
+                            <bestAvailableToLayPrices/>
+                        </selection>
+                        <selection id="1032015">
+                            <name>Natural Win</name>
+                            <status>LOSER</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices/>
+                            <bestAvailableToLayPrices/>
+                        </selection>
+                        <selection id="1032016">
+                            <name>Natural Tie</name>
+                            <status>LOSER</status>
+                            <amountMatched>0.0</amountMatched>
+                            <bestAvailableToBackPrices/>
+                            <bestAvailableToLayPrices/>
+                        </selection>
+                    </selections>
+                </market>
+            </markets>
+        </game>
+    </channel>
+</channelSnapshot>

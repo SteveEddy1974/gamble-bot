@@ -1,16 +1,33 @@
 # Baccarat SideBets Bot configuration
 credentials:
+  # Do not commit secrets. Prefer env vars:
+  #   BETFAIR_USERNAME
+  #   BETFAIR_PASSWORD
   username: "steve@aquacreations.ltd"
   password: "Egr1t_1605@LetssG000"
 
 bot:
-  min_edge: 0.05
-  max_exposure_pct: 0.10
-  start_balance: 1000
+  min_edge: 0.05  # Sweet-spot from dry-run sweep
+  max_exposure_pct: 0.07
+  max_stake_pct: 0.02  # Allow minimum stake within exposure
+  min_stake: 1.0  # Minimum stake
+  min_price: 6.0  # Filter for prices >= 6.0 (sweep recommendation)
+  bet_cooldown_seconds: 10  # Throttle repeat bets per selection
+  trade_natural_win: true
+  trade_pocket_pair: true  # Enabled: 38% avg edge, 62% more opportunities
+  trade_natural_tie: true  # Low frequency, very high edge when it hits
+  trade_highest_nine: true  # Moderate frequency
+  trade_highest_odd: true  # High frequency, lower edge
+  kelly_factor: 0.05
+  start_balance: 30  # Set to your actual intended balance
   poll_interval_seconds: 3
   currency: "GBP"
-  simulate: true
-  simulate_place_bets: true
+  # Channel ID for live Baccarat table (get from Betfair API)
+  # 1444086 = Exchange Baccarat (standard speed)
+  # 1444089 = Turbo Exchange Baccarat (faster games)
+  channel_id: 1444086
+  simulate: false  # Live API mode
+  simulate_place_bets: false  # Set false to avoid API errors
   simulate_start_cards: 416
   simulate_decrement: 8
   simulate_reset_after: 50
@@ -36,9 +53,9 @@ bot:
   # Operator gating for live canary deployments
   # Set `live_enabled: true` and configure `operator_token_hash` to the SHA256 of a secret token.
   # Operators enable live by setting the token value in the env var named in `operator_token_env` (default BOT_OPERATOR_TOKEN).
-  live_enabled: false
+  live_enabled: true
   operator_token_env: "BOT_OPERATOR_TOKEN"
-  operator_token_hash: null
+  operator_token_hash: "2bca6be59e49c1615d53bdf252f6cbda43a93bf76ebe7f1491733d08c72159fc"
   # Canary-specific limits (applied when live is enabled)
   canary_max_stake: 1.0
   canary_max_exposure_pct: 0.01
@@ -47,6 +64,15 @@ bot:
   alerts_enabled: false
   alert_webhook_url: null
   alert_level: WARNING
+
+  # UI automation (Selenium)
+  ui_auto_place: false         # Disable UI placer (API only)
+  ui_auto_submit: false        # Not used when UI placer disabled
+  ui_require_confirmation: true  # If true, show a confirmation dialog before auto-submitting
+  ui_browser: "chrome"
+  ui_headless: false
+  ui_login_mode: "store"      # 'store' = use creds in credentials, 'manual' = require manual login
+  ui_log_file: "ui_placements.csv"  # Audit log for UI placements
 
 logging:
   level: DEBUG

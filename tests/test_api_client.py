@@ -10,9 +10,14 @@ class TestAPIClient(unittest.TestCase):
     def test_auth_headers(self):
         client = APIClient(self.valid_credentials)
         headers = client.session.headers
+        # Per official spec: plaintext password, agent format, instance MD5
         self.assertIn('gamexAPIPassword', headers)
         self.assertIn('gamexAPIAgent', headers)
         self.assertIn('gamexAPIAgentInstance', headers)
+        # Verify agent format: email.AppName.Version
+        self.assertTrue('.BaccaratBot.' in headers['gamexAPIAgent'])
+        # Verify instance is 32-char hex
+        self.assertEqual(len(headers['gamexAPIAgentInstance']), 32)
 
     def test_invalid_auth(self):
         # This test expects the API to reject invalid credentials or channel

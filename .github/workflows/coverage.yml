@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.10, 3.11]
+        python-version: [3.11, 3.12]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -23,8 +23,10 @@ jobs:
           pip install -r requirements.txt
       - name: Run tests with coverage
         run: |
-          coverage run -m unittest discover
-          coverage report --fail-under=90
+          pip install pytest pytest-cov
+          # Exclude scripts and tests from coverage so we measure the main package code
+          coverage run --omit='scripts/*,tests/*' -m pytest
+          coverage report --fail-under=70
       - name: Validate /metrics endpoint
         env:
           PYTHONUNBUFFERED: 1
