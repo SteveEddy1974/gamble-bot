@@ -11,6 +11,8 @@ import sys
 import os
 import argparse
 import time
+import json
+from datetime import datetime
 # ensure project root is on path when executed from scripts/
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
@@ -133,7 +135,7 @@ def run_real_api_dry(
     print(f"=== REAL API DRY-RUN MODE ===")
     print(f"Channel: {channel_id}")
     print(f"Iterations: {iterations}")
-    print(f"Start Balance: £{start_balance}")
+    print(f"Start Balance: GBP {start_balance}")
     print(f"Max Exposure: {max_exposure_pct*100}%")
     print(f"IMPORTANT: NO REAL BETS WILL BE PLACED")
     print("=" * 50)
@@ -258,9 +260,9 @@ def run_real_api_dry(
                     if can_place:
                         stats['would_place'] += 1
                         stats['total_would_stake'] += stake
-                        print(f"[{i+1}] ✓ WOULD PLACE BET: {rec['name']}")
+                        print(f"[{i+1}] WOULD PLACE BET: {rec['name']}")
                         print(f"      Edge: {edge*100:+.2f}% | Price: {rec['price']:.3f} | True Prob: {rec['true_prob']:.3f}")
-                        print(f"      Stake: £{stake:.2f} | Balance: £{bet_manager.balance:.2f} | Exposure: £{bet_manager.current_exposure:.2f}")
+                        print(f"      Stake: GBP {stake:.2f} | Balance: GBP {bet_manager.balance:.2f} | Exposure: GBP {bet_manager.current_exposure:.2f}")
                     else:
                         if stake > bet_manager.balance:
                             stats['would_skip_balance'] += 1
@@ -268,13 +270,13 @@ def run_real_api_dry(
                         else:
                             stats['would_skip_exposure'] += 1
                             reason = "max exposure reached"
-                        print(f"[{i+1}] ✗ WOULD SKIP: {rec['name']} ({reason})")
+                        print(f"[{i+1}] WOULD SKIP: {rec['name']} ({reason})")
             
             time.sleep(poll_interval)
             
         except Exception as e:
             stats['api_errors'] += 1
-            print(f"[{i+1}] ❌ API Error: {e}")
+            print(f"[{i+1}] API Error: {e}")
             time.sleep(poll_interval)
             continue
     
@@ -288,11 +290,33 @@ def run_real_api_dry(
     print(f"Would Place: {stats['would_place']}")
     print(f"Skipped (Exposure): {stats['would_skip_exposure']}")
     print(f"Skipped (Balance): {stats['would_skip_balance']}")
-    print(f"Total Would Stake: £{stats['total_would_stake']:.2f}")
+    print(f"Total Would Stake: GBP {stats['total_would_stake']:.2f}")
     print(f"API Errors: {stats['api_errors']}")
-    print(f"Final Balance: £{bet_manager.balance:.2f} (unchanged - no real bets)")
+    print(f"Final Balance: GBP {bet_manager.balance:.2f} (unchanged - no real bets)")
     print("=" * 50)
 
+    # Optionally write results to JSON file for offline analysis (intermediate: before sweep)
+    if 'args' in locals() and getattr(args, 'output', None):
+        out_path = args.output
+        try:
+            result = {
+                'timestamp': datetime.utcnow().isoformat() + 'Z',
+                'channel_id': channel_id,
+                'iterations': iterations,
+                'start_balance': start_balance,
+                'max_exposure_pct': max_exposure_pct,
+                'stats': stats,
+                'all_records': all_records,
+                'sweep_results': None,  # will be populated after sweep if run
+            }
+            with open(out_path, 'w', encoding='utf-8') as f:
+                json.dump(result, f, indent=2, default=str, ensure_ascii=False)
+            print(f"Wrote intermediate results to {out_path}")
+        except Exception as e:
+            print(f"Failed to write results to {out_path}: {e}")
+
+    # Prepare for sweep results export
+    sweep_results = None
     if sweep and all_records:
         print()
         print("=" * 50)
@@ -321,18 +345,37 @@ def run_real_api_dry(
 
         if not candidates:
             print("No strategies produced any bets.")
-            return
-
-        candidates.sort(key=lambda x: (x[3]['avg_true_prob'], x[3]['avg_edge']), reverse=True)
-        for me, mp, kf, s in candidates[:5]:
+        else:
+            candidates.sort(key=lambda x: (x[3]['avg_true_prob'], x[3]['avg_edge']), reverse=True)
+            for me, mp, kf, s in candidates[:5]:
+                print(
+                    f"min_edge={me:.2f} min_price={mp} kelly={kf:.2f} | "
+                    f"bets={s['would_place']} avg_true_prob={s['avg_true_prob']:.3f} avg_edge={s['avg_edge']:.3f}"
+                )
+            best = candidates[0]
             print(
-                f"min_edge={me:.2f} min_price={mp} kelly={kf:.2f} | "
-                f"bets={s['would_place']} avg_true_prob={s['avg_true_prob']:.3f} avg_edge={s['avg_edge']:.3f}"
+                f"\nSuggested sweet spot: min_edge={best[0]:.2f}, min_price={best[1]}, kelly={best[2]:.2f}"
             )
-        best = candidates[0]
-        print(
-            f"\nSuggested sweet spot: min_edge={best[0]:.2f}, min_price={best[1]}, kelly={best[2]:.2f}"
-        )
+            # Exportable sweep results
+            sweep_results = [
+                {"min_edge": me, "min_price": mp, "kelly": kf, "stats": s}
+                for me, mp, kf, s in candidates
+            ]
+            # Optionally append sweep results to the output file
+            if 'args' in locals() and getattr(args, 'output', None):
+                out_path = args.output
+                try:
+                    try:
+                        with open(out_path, 'r', encoding='utf-8') as f:
+                            data = json.load(f)
+                    except Exception:
+                        data = {}
+                    data.update({'sweep_results': sweep_results})
+                    with open(out_path, 'w', encoding='utf-8') as f:
+                        json.dump(data, f, indent=2, default=str, ensure_ascii=False)
+                    print(f"Wrote sweep results to {out_path}")
+                except Exception as e:
+                    print(f"Failed to write sweep results to {out_path}: {e}")
 
 
 if __name__ == '__main__':
@@ -357,6 +400,8 @@ if __name__ == '__main__':
                        help='Enable Pocket Pair selection (default: config)')
     parser.add_argument('--sweep', action='store_true',
                        help='Run a strategy sweep after collecting data')
+    parser.add_argument('--output', type=str, default=None,
+                       help='Write JSON summary + records to this file (e.g., results.json)')
     
     args = parser.parse_args()
     
