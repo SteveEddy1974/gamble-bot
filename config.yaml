@@ -11,10 +11,13 @@ bot:
   max_exposure_pct: 0.07
   max_stake_pct: 0.02  # Allow minimum stake within exposure
   min_stake: 1.0  # Minimum stake
-  min_price: null  # No minimum price filter
+  min_price: 6.0  # Filter for prices >= 6.0 (sweep recommendation)
   bet_cooldown_seconds: 10  # Throttle repeat bets per selection
   trade_natural_win: true
-  trade_pocket_pair: false
+  trade_pocket_pair: true  # Enabled: 38% avg edge, 62% more opportunities
+  trade_natural_tie: true  # Low frequency, very high edge when it hits
+  trade_highest_nine: true  # Moderate frequency
+  trade_highest_odd: true  # High frequency, lower edge
   kelly_factor: 0.05
   start_balance: 30  # Set to your actual intended balance
   poll_interval_seconds: 3
@@ -52,7 +55,7 @@ bot:
   # Operators enable live by setting the token value in the env var named in `operator_token_env` (default BOT_OPERATOR_TOKEN).
   live_enabled: true
   operator_token_env: "BOT_OPERATOR_TOKEN"
-  operator_token_hash: "41320786ae63f265aa1ce2aef983bf778350b2c4f15c593c734ee2f2f29e0b0f"
+  operator_token_hash: "2bca6be59e49c1615d53bdf252f6cbda43a93bf76ebe7f1491733d08c72159fc"
   # Canary-specific limits (applied when live is enabled)
   canary_max_stake: 1.0
   canary_max_exposure_pct: 0.01

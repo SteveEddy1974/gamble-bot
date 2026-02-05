@@ -1,0 +1,1147 @@
+{
+  "timestamp": "2026-02-05T14:33:40.782831Z",
+  "channel_id": "1444086",
+  "iterations": 150,
+  "start_balance": 30.0,
+  "max_exposure_pct": 0.1,
+  "stats": {
+    "opportunities_found": 26,
+    "would_place": 26,
+    "would_skip_exposure": 0,
+    "would_skip_balance": 0,
+    "api_errors": 0,
+    "total_would_stake": 26.0
+  },
+  "all_records": [
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.4,
+      "true_prob": 0.14385154721543794
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34368205341097824
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.0,
+      "true_prob": 0.14383981453261127
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.4,
+      "true_prob": 0.3439800570713838
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.0,
+      "true_prob": 0.14383981453261127
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.4,
+      "true_prob": 0.3439800570713838
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.0,
+      "true_prob": 0.14383981453261127
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.4,
+      "true_prob": 0.3439800570713838
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.0,
+      "true_prob": 0.14383981453261127
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.4,
+      "true_prob": 0.3439800570713838
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.0,
+      "true_prob": 0.14383981453261127
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.4,
+      "true_prob": 0.3439800570713838
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.0,
+      "true_prob": 0.14383981453261127
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.4,
+      "true_prob": 0.3439800570713838
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14376065074365088
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34498991932420764
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14376065074365088
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34498991932420764
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14376065074365088
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34498991932420764
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14376065074365088
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34498991932420764
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14376065074365088
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34498991932420764
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14376065074365088
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34498991932420764
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14376065074365088
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34498991932420764
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.5,
+      "true_prob": 0.14389602697872533
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.65,
+      "true_prob": 0.3456766392154804
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.4,
+      "true_prob": 0.14390086729765778
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.34596580063813
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.4,
+      "true_prob": 0.14390086729765778
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.34596580063813
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.4,
+      "true_prob": 0.14390086729765778
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.34596580063813
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.4,
+      "true_prob": 0.14390086729765778
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.34596580063813
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.4,
+      "true_prob": 0.14390086729765778
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.34596580063813
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.4,
+      "true_prob": 0.14390086729765778
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.34596580063813
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14390384058691189
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34658961380142894
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14390384058691189
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34658961380142894
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14390384058691189
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34658961380142894
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14390384058691189
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34658961380142894
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14390384058691189
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34658961380142894
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14390384058691189
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34658961380142894
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14390384058691189
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.0,
+      "true_prob": 0.34658961380142894
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.0,
+      "true_prob": 0.1439286274183846
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.6,
+      "true_prob": 0.34726358969602317
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.2,
+      "true_prob": 0.14385973704199223
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.3452799956254158
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.2,
+      "true_prob": 0.14385973704199223
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.3452799956254158
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.2,
+      "true_prob": 0.14385973704199223
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.3452799956254158
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.2,
+      "true_prob": 0.14385973704199223
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.3452799956254158
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.2,
+      "true_prob": 0.14385973704199223
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.3452799956254158
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.2,
+      "true_prob": 0.14385973704199223
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.3452799956254158
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 13.2,
+      "true_prob": 0.14385973704199223
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.6,
+      "true_prob": 0.3452799956254158
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14383872100350836
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.05,
+      "true_prob": 0.34379082202706746
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14383872100350836
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.05,
+      "true_prob": 0.34379082202706746
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14383872100350836
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.05,
+      "true_prob": 0.34379082202706746
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14383872100350836
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.05,
+      "true_prob": 0.34379082202706746
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14383872100350836
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.05,
+      "true_prob": 0.34379082202706746
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14383872100350836
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.05,
+      "true_prob": 0.34379082202706746
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 6.9,
+      "true_prob": 0.14383872100350836
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.05,
+      "true_prob": 0.34379082202706746
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 7.7,
+      "true_prob": 0.14403119305988685
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 3.7,
+      "true_prob": 0.34453814255045045
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.8,
+      "true_prob": 0.14404523483551193
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.7,
+      "true_prob": 0.34503719407662264
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.8,
+      "true_prob": 0.14404523483551193
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.7,
+      "true_prob": 0.34503719407662264
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.8,
+      "true_prob": 0.14404523483551193
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.7,
+      "true_prob": 0.34503719407662264
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.8,
+      "true_prob": 0.14404523483551193
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.7,
+      "true_prob": 0.34503719407662264
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.8,
+      "true_prob": 0.14404523483551193
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.7,
+      "true_prob": 0.34503719407662264
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.8,
+      "true_prob": 0.14404523483551193
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.7,
+      "true_prob": 0.34503719407662264
+    },
+    {
+      "name": "Pocket Pair In Any Hand",
+      "selection_id": "1032012",
+      "price": 16.8,
+      "true_prob": 0.14404523483551193
+    },
+    {
+      "name": "Natural Win",
+      "selection_id": "1032015",
+      "price": 6.7,
+      "true_prob": 0.34503719407662264
+    }
+  ],
+  "sweep_results": [
+    {
+      "min_edge": 0.05,
+      "min_price": null,
+      "kelly": 0.05,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.05,
+      "min_price": null,
+      "kelly": 0.1,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.05,
+      "min_price": 6.0,
+      "kelly": 0.05,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.05,
+      "min_price": 6.0,
+      "kelly": 0.1,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.08,
+      "min_price": null,
+      "kelly": 0.05,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.08,
+      "min_price": null,
+      "kelly": 0.1,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.08,
+      "min_price": 6.0,
+      "kelly": 0.05,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.08,
+      "min_price": 6.0,
+      "kelly": 0.1,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.12,
+      "min_price": null,
+      "kelly": 0.05,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.12,
+      "min_price": null,
+      "kelly": 0.1,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.12,
+      "min_price": 6.0,
+      "kelly": 0.05,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    },
+    {
+      "min_edge": 0.12,
+      "min_price": 6.0,
+      "kelly": 0.1,
+      "stats": {
+        "opportunities_found": 26,
+        "would_place": 26,
+        "would_skip_exposure": 0,
+        "would_skip_balance": 0,
+        "total_would_stake": 26.0,
+        "avg_true_prob": 0.3450729028527443,
+        "avg_edge": 0.16807393788736136
+      }
+    }
+  ]
+}

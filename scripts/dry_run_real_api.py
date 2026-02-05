@@ -16,7 +16,7 @@ from datetime import datetime
 # ensure project root is on path when executed from scripts/
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from main import parse_shoe_state, parse_market_selections, prob_pocket_pair, prob_natural_win, BetManager, load_config
+from main import parse_shoe_state, parse_market_selections, prob_pocket_pair, prob_natural_win, prob_natural_tie, prob_highest_hand_nine, prob_highest_hand_odd, BetManager, load_config
 from engine import evaluate, size_stake, calculate_dynamic_max_stake_pct
 from api_client import APIClient
 
@@ -30,6 +30,12 @@ def _selection_records(selections, shoe):
             true_prob = prob_pocket_pair(shoe)
         elif sel.name == 'Natural Win':
             true_prob = prob_natural_win(shoe)
+        elif sel.name == 'Natural Tie':
+            true_prob = prob_natural_tie(shoe)
+        elif sel.name == 'Highest Hand Has Nine':
+            true_prob = prob_highest_hand_nine(shoe)
+        elif sel.name == 'Highest Hand Is Odd':
+            true_prob = prob_highest_hand_odd(shoe)
         else:
             continue
         records.append({
@@ -41,7 +47,7 @@ def _selection_records(selections, shoe):
     return records
 
 
-def _eval_strategy(records, start_balance, max_exposure_pct, min_edge, min_price, kelly_factor, trade_natural, trade_pocket):
+def _eval_strategy(records, start_balance, max_exposure_pct, min_edge, min_price, kelly_factor, trade_natural, trade_pocket, trade_natural_tie, trade_highest_nine, trade_highest_odd, min_stake=1.0):
     bet_manager = BetManager(start_balance, start_balance * max_exposure_pct)
     stats = {
         'opportunities_found': 0,
@@ -60,6 +66,12 @@ def _eval_strategy(records, start_balance, max_exposure_pct, min_edge, min_price
             continue
         if rec['name'] == 'Natural Win' and not trade_natural:
             continue
+        if rec['name'] == 'Natural Tie' and not trade_natural_tie:
+            continue
+        if rec['name'] == 'Highest Hand Has Nine' and not trade_highest_nine:
+            continue
+        if rec['name'] == 'Highest Hand Is Odd' and not trade_highest_odd:
+            continue
         if min_price is not None and rec['price'] < min_price:
             continue
 
@@ -77,6 +89,14 @@ def _eval_strategy(records, start_balance, max_exposure_pct, min_edge, min_price
             shrink=kelly_factor,
             max_stake_pct=dynamic_max_stake_pct,
         )
+        
+        # Enforce minimum stake
+        if stake < min_stake:
+            if bet_manager.balance < min_stake:
+                # Cannot afford minimum stake - skip this opportunity
+                stats['would_skip_balance'] += 1
+                continue
+            stake = min_stake
 
         can_place = bet_manager.can_place(stake)
         if can_place:
@@ -106,7 +126,12 @@ def run_real_api_dry(
     kelly_factor=None,
     trade_natural=True,
     trade_pocket=True,
+    trade_natural_tie=False,
+    trade_highest_nine=False,
+    trade_highest_odd=False,
     sweep=False,
+    output=None,
+    min_stake=1.0,
 ):
     """
     Connect to real Betfair API and evaluate opportunities without placing bets.
@@ -154,6 +179,9 @@ def run_real_api_dry(
     kelly_factor = kelly_factor if kelly_factor is not None else config['bot'].get('kelly_factor', 0.25)
     trade_natural = trade_natural if trade_natural is not None else config['bot'].get('trade_natural_win', True)
     trade_pocket = trade_pocket if trade_pocket is not None else config['bot'].get('trade_pocket_pair', True)
+    trade_natural_tie = trade_natural_tie if trade_natural_tie is not None else config['bot'].get('trade_natural_tie', False)
+    trade_highest_nine = trade_highest_nine if trade_highest_nine is not None else config['bot'].get('trade_highest_nine', False)
+    trade_highest_odd = trade_highest_odd if trade_highest_odd is not None else config['bot'].get('trade_highest_odd', False)
 
     all_records = []
     
@@ -239,6 +267,12 @@ def run_real_api_dry(
                     continue
                 if rec['name'] == 'Natural Win' and not trade_natural:
                     continue
+                if rec['name'] == 'Natural Tie' and not trade_natural_tie:
+                    continue
+                if rec['name'] == 'Highest Hand Has Nine' and not trade_highest_nine:
+                    continue
+                if rec['name'] == 'Highest Hand Is Odd' and not trade_highest_odd:
+                    continue
                 if min_price is not None and rec['price'] < min_price:
                     continue
 
@@ -255,6 +289,14 @@ def run_real_api_dry(
                         shrink=kelly_factor,
                         max_stake_pct=dynamic_max_stake_pct
                     )
+                    
+                    # Enforce minimum stake
+                    if stake < min_stake:
+                        if bet_manager.balance < min_stake:
+                            # Cannot afford minimum stake - skip this opportunity
+                            stats['would_skip_balance'] += 1
+                            continue
+                        stake = min_stake
 
                     can_place = bet_manager.can_place(stake)
                     if can_place:
@@ -296,8 +338,8 @@ def run_real_api_dry(
     print("=" * 50)
 
     # Optionally write results to JSON file for offline analysis (intermediate: before sweep)
-    if 'args' in locals() and getattr(args, 'output', None):
-        out_path = args.output
+    if output:
+        out_path = output
         try:
             result = {
                 'timestamp': datetime.utcnow().isoformat() + 'Z',
@@ -338,6 +380,10 @@ def run_real_api_dry(
                         kf,
                         trade_natural,
                         trade_pocket,
+                        trade_natural_tie,
+                        trade_highest_nine,
+                        trade_highest_odd,
+                        min_stake,
                     )
                     if s['would_place'] == 0:
                         continue
@@ -362,8 +408,8 @@ def run_real_api_dry(
                 for me, mp, kf, s in candidates
             ]
             # Optionally append sweep results to the output file
-            if 'args' in locals() and getattr(args, 'output', None):
-                out_path = args.output
+            if output:
+                out_path = output
                 try:
                     try:
                         with open(out_path, 'r', encoding='utf-8') as f:
@@ -398,10 +444,18 @@ if __name__ == '__main__':
                        help='Enable Natural Win selection (default: config)')
     parser.add_argument('--trade-pocket', action='store_true',
                        help='Enable Pocket Pair selection (default: config)')
+    parser.add_argument('--trade-natural-tie', action='store_true',
+                       help='Enable Natural Tie selection (default: config)')
+    parser.add_argument('--trade-highest-nine', action='store_true',
+                       help='Enable Highest Hand Has Nine selection (default: config)')
+    parser.add_argument('--trade-highest-odd', action='store_true',
+                       help='Enable Highest Hand Is Odd selection (default: config)')
     parser.add_argument('--sweep', action='store_true',
                        help='Run a strategy sweep after collecting data')
     parser.add_argument('--output', type=str, default=None,
                        help='Write JSON summary + records to this file (e.g., results.json)')
+    parser.add_argument('--min-stake', type=float, default=1.0,
+                       help='Minimum stake per bet (default: 1.0 GBP)')
     
     args = parser.parse_args()
     
@@ -415,5 +469,10 @@ if __name__ == '__main__':
         kelly_factor=args.kelly_factor,
         trade_natural=args.trade_natural or None,
         trade_pocket=args.trade_pocket or None,
+        trade_natural_tie=args.trade_natural_tie or None,
+        trade_highest_nine=args.trade_highest_nine or None,
+        trade_highest_odd=args.trade_highest_odd or None,
         sweep=args.sweep,
+        output=args.output,
+        min_stake=args.min_stake,
     )
