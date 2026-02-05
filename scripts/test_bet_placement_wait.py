@@ -8,9 +8,18 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from main import load_config
 from api_client import APIClient
 from lxml import etree
+import pytest
 
 config = load_config()
 api_client = APIClient(config['credentials'])
+
+# This script contacts the live Betfair Games API and should not run in CI by default.
+# To enable these live tests set the RUN_REAL_API environment variable (e.g. RUN_REAL_API=1).
+if not os.environ.get('RUN_REAL_API'):
+    pytest.skip(
+        "Skipping live Betfair API test in CI; set RUN_REAL_API=1 to enable",
+        allow_module_level=True,
+    )
 
 CHANNEL = '1444086'
 TIMEOUT = 120  # seconds
